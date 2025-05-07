@@ -893,6 +893,234 @@
 </section>
 
 
+
+
+<section id="random-wishes" class="random-wishes-section">
+    <h2 class="section-title">Особые пожелания</h2>
+    <div class="random-wishes-container">
+        <div class="random-wish-box">
+            <div class="random-wish-content" id="wishContent">
+                <p class="wish-placeholder">Нажмите на кнопку, чтобы получить особое поздравление!</p>
+            </div>
+            <div class="random-wish-author" id="wishAuthor"></div>
+        </div>
+        <button class="wish-button" id="getWishButton">Получить поздравление</button>
+    </div>
+</section>
+<style>
+    /* Секция случайных поздравлений */
+    .random-wishes-section {
+        padding: 100px 5%;
+        max-width: 1200px;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    .random-wishes-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+    }
+
+    .random-wish-box {
+        width: 100%;
+        max-width: 800px;
+        min-height: 200px;
+        background-color: rgba(10, 10, 20, 0.8);
+        border-radius: 15px;
+        padding: 40px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        color: white;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .random-wish-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .random-wish-content {
+        font-size: 20px;
+        line-height: 1.8;
+        margin-bottom: 20px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .random-wish-content::before {
+        content: '\201C'; /* Открывающая кавычка */
+        font-size: 80px;
+        font-family: Georgia, serif;
+        color: rgba(212, 175, 55, 0.2);
+        position: absolute;
+        top: -40px;
+        left: -20px;
+        z-index: -1;
+    }
+
+    .random-wish-content::after {
+        content: '\201D'; /* Закрывающая кавычка */
+        font-size: 80px;
+        font-family: Georgia, serif;
+        color: rgba(212, 175, 55, 0.2);
+        position: absolute;
+        bottom: -80px;
+        right: -20px;
+        z-index: -1;
+    }
+
+    .random-wish-author {
+        font-style: italic;
+        color: #d4af37;
+        font-size: 18px;
+        text-align: right;
+        margin-top: 15px;
+    }
+
+    .wish-placeholder {
+        color: rgba(255, 255, 255, 0.7);
+        font-style: italic;
+    }
+
+    .wish-button {
+        padding: 15px 30px;
+        background: linear-gradient(45deg, #d4af37, #f5cc7f);
+        color: #111;
+        border: none;
+        border-radius: 50px;
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .wish-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(212, 175, 55, 0.6);
+    }
+
+    .wish-button:active {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 10px rgba(212, 175, 55, 0.4);
+    }
+
+    /* Эффект появления поздравления */
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .fade-in {
+        animation: fadeIn 0.8s ease forwards;
+    }
+
+    /* Адаптивность для мобильных устройств */
+    @media (max-width: 768px) {
+        .random-wish-box {
+            padding: 30px;
+            min-height: 180px;
+        }
+
+        .random-wish-content {
+            font-size: 16px;
+        }
+
+        .random-wish-author {
+            font-size: 16px;
+        }
+
+        .random-wish-content::before,
+        .random-wish-content::after {
+            font-size: 60px;
+        }
+    }
+</style>
+<script>
+    // Массив с поздравлениями
+    const wishes = [
+        {
+            text: "С Днем Рождения, дорогой брат! Пусть каждый день твоей жизни будет наполнен радостью, любовью и достижениями. Ты заслуживаешь всего самого лучшего!",
+            author: "Твоя сестра"
+        },
+        {
+            text: "В твой день рождения хочу пожелать тебе крепкого здоровья, неиссякаемой энергии и вдохновения для новых свершений. Пусть все твои мечты сбываются!",
+            author: "От всей нашей семьи"
+        },
+        {
+            text: "Поздравляю с днем рождения! Желаю тебе успеха во всех начинаниях, верных друзей рядом и моментов, которые запомнятся на всю жизнь.",
+            author: "Твой брат"
+        },
+        {
+            text: "Пусть этот год принесет тебе новые возможности, интересные знакомства и яркие впечатления. С днем рождения, дорогой брат!",
+            author: "Твои родители"
+        },
+        {
+            text: "Желаю тебе бесконечного счастья, финансового благополучия и гармонии в душе. Пусть каждый день дарит тебе новые поводы для улыбки!",
+            author: "С любовью, твои родные"
+        },
+        {
+            text: "С днем рождения! Пусть твой путь всегда будет освещен светом удачи и везения. Будь счастлив, здоров и любим!",
+            author: "Твоя семья"
+        },
+        {
+            text: "Поздравляю с новым годом твоей жизни! Желаю, чтобы этот год был полон приятных сюрпризов, достижений и исполнения самых заветных желаний.",
+            author: "Твои близкие"
+        }
+    ];
+
+    // Функция для получения случайного поздравления
+    function getRandomWish() {
+        const randomIndex = Math.floor(Math.random() * wishes.length);
+        return wishes[randomIndex];
+    }
+
+    // Обработчик нажатия на кнопку
+    document.addEventListener('DOMContentLoaded', function() {
+        const wishContent = document.getElementById('wishContent');
+        const wishAuthor = document.getElementById('wishAuthor');
+        const getWishButton = document.getElementById('getWishButton');
+
+        if (getWishButton) {
+            getWishButton.addEventListener('click', function() {
+                // Удаление предыдущих классов анимации
+                wishContent.classList.remove('fade-in');
+                wishAuthor.classList.remove('fade-in');
+
+                // Триггерим перерисовку, чтобы анимация запустилась снова
+                void wishContent.offsetWidth;
+                void wishAuthor.offsetWidth;
+
+                // Получаем случайное поздравление
+                const randomWish = getRandomWish();
+
+                // Обновляем содержимое
+                wishContent.innerHTML = `<p>${randomWish.text}</p>`;
+                wishAuthor.textContent = randomWish.author;
+
+                // Добавляем классы анимации
+                wishContent.classList.add('fade-in');
+                wishAuthor.classList.add('fade-in');
+            });
+        }
+    });
+</script>
+
 <footer>
     <div class="footer-content">
         <h3 class="footer-title">С любовью от твоей семьи</h3>
