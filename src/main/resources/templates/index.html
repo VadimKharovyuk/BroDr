@@ -472,6 +472,41 @@
                 min-width: 80px;
             }
         }
+        .music-btn {
+            position: relative;
+            overflow: hidden;
+            padding-right: 45px;
+        }
+
+        .music-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: all 0.3s;
+        }
+
+        .music-btn:hover .music-icon {
+            transform: translateY(-50%) scale(1.2);
+        }
+
+        /* Анимация для активного состояния музыки */
+        @keyframes pulse {
+            0% {
+                transform: translateY(-50%) scale(1);
+            }
+            50% {
+                transform: translateY(-50%) scale(1.2);
+            }
+            100% {
+                transform: translateY(-50%) scale(1);
+            }
+        }
+
+        .music-playing .music-icon {
+            animation: pulse 1.5s infinite;
+            color: #fff;
+        }
     </style>
 </head>
 <body>
@@ -479,30 +514,33 @@
 
 <nav class="navbar">
     <div class="nav-container">
-        <a href="#" class="logo">День Рождения</a>
+        <a href="#" class="logo">День народження</a>
         <ul class="nav-links">
-            <li><a href="#header">Главная</a></li>
-            <li><a href="#wishes">Поздравления</a></li>
-            <li><a href="#moments">Моменты</a></li>
-            <li><a href="#school">Школьные годы</a></li>
-            <li><a href="#countdown">Обратный отсчет</a></li>
+            <li><a href="#header">Головна</a></li>
+            <li><a href="#wishes">Привітання</a></li>
+            <li><a href="#moments">Моменти</a></li>
+            <li><a href="#school">Шкільні роки</a></li>
+            <li><a href="#countdown">Зворотний відлік</a></li>
         </ul>
     </div>
 </nav>
-
 <header id="header">
     <div class="header-content">
         <div class="header-photo">
-            <img src="/Police.jpeg" alt="Фото именинника">
+            <img src="/Police.jpeg" alt="Фото іменинника">
         </div>
-        <h1 class="header-title">С Днем Рождения!</h1>
-        <h2 class="header-subtitle">18 мая - особенный день</h2>
+        <h1 class="header-title">З Днем народження!</h1>
+        <h2 class="header-subtitle">18 травня — особливий день</h2>
         <p class="header-description">
-            Сегодня мы празднуем день рождения самого замечательного брата на свете!
-            Пусть этот день будет наполнен радостью, любовью и теплыми воспоминаниями.
-            Ты заслуживаешь всего самого лучшего!
+            Сьогодні ми святкуємо день народження найкращого брата у світі!
+            Нехай цей день буде наповнений радістю, любов’ю та теплими спогадами.
+            Ти заслуговуєш на все найкраще!
         </p>
-        <a href="#wishes" class="btn">Поздравления</a>
+        <audio id="birthdayMusic" src="/(E) Dr. Fresch - Armageddon.mp3" preload="auto"></audio>
+        <a href="#wishes" class="btn music-btn" id="playMusicBtn">
+            Привітання
+            <span class="music-icon"><i class="fas fa-music"></i></span>
+        </a>
     </div>
 </header>
 
@@ -867,32 +905,6 @@
 </style>
 
 
-<section id="countdown" class="section">
-    <h2 class="section-title">Обратный отсчет</h2>
-    <div class="countdown">
-        <h3 style="font-size: 24px; margin-bottom: 10px;">До дня рождения осталось:</h3>
-        <div class="countdown-timer">
-            <div class="countdown-item">
-                <div class="countdown-number" id="days">0</div>
-                <div class="countdown-label">Дней</div>
-            </div>
-            <div class="countdown-item">
-                <div class="countdown-number" id="hours">0</div>
-                <div class="countdown-label">Часов</div>
-            </div>
-            <div class="countdown-item">
-                <div class="countdown-number" id="minutes">0</div>
-                <div class="countdown-label">Минут</div>
-            </div>
-            <div class="countdown-item">
-                <div class="countdown-number" id="seconds">0</div>
-                <div class="countdown-label">Секунд</div>
-            </div>
-        </div>
-    </div>
-</section>
-
-
 
 
 <section id="random-wishes" class="random-wishes-section">
@@ -1121,6 +1133,33 @@
     });
 </script>
 
+
+
+<section id="countdown" class="section">
+    <h2 class="section-title">Обратный отсчет</h2>
+    <div class="countdown">
+        <h3 style="font-size: 24px; margin-bottom: 10px;">До дня рождения осталось:</h3>
+        <div class="countdown-timer">
+            <div class="countdown-item">
+                <div class="countdown-number" id="days">0</div>
+                <div class="countdown-label">Дней</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="hours">0</div>
+                <div class="countdown-label">Часов</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="minutes">0</div>
+                <div class="countdown-label">Минут</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="seconds">0</div>
+                <div class="countdown-label">Секунд</div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <footer>
     <div class="footer-content">
         <h3 class="footer-title">С любовью от твоей семьи</h3>
@@ -1286,6 +1325,42 @@
                 behavior: 'smooth'
             });
         });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const musicBtn = document.getElementById('playMusicBtn');
+        const audio = document.getElementById('birthdayMusic');
+        let isPlaying = false;
+
+        if (musicBtn && audio) {
+            musicBtn.addEventListener('click', function(e) {
+                // Поскольку кнопка также является ссылкой, не препятствуем переходу к секции
+                // Только добавляем воспроизведение музыки
+
+                if (isPlaying) {
+                    audio.pause();
+                    musicBtn.classList.remove('music-playing');
+                } else {
+                    audio.play().catch(error => {
+                        console.log('Autoplay prevented: ', error);
+                        // В современных браузерах автовоспроизведение может быть блокировано
+                        // В этом случае мы можем показать пользователю подсказку
+                        alert('Нажмите на кнопку еще раз для воспроизведения музыки');
+                    });
+                    musicBtn.classList.add('music-playing');
+                }
+
+                isPlaying = !isPlaying;
+            });
+
+            // Добавляем обработчик окончания воспроизведения
+            audio.addEventListener('ended', function() {
+                isPlaying = false;
+                musicBtn.classList.remove('music-playing');
+            });
+        }
     });
 </script>
 </body>
